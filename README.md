@@ -1,6 +1,5 @@
-# nLDT-Recipe
-nLDT Recipe
-
+# nLDT-Oven
+Bakes [nLDT-Recipe](https://github.com/Geonovum/nLDT-Recipe)s
 # Dependencies
 
 Recipes use processes running on [ogc-api-kennissessie](https://github.com/Geonovum/ogc-api-kennissessie)
