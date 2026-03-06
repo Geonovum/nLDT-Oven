@@ -1,12 +1,12 @@
-// substitute variables in the recipe
-function changeValue(obj, variables) {
+// substitute ingredients in the recipe
+function changeValue(obj, ingredients) {
   if (typeof obj === "object") {
     // iterating over the object using for..in
     for (var keys in obj) {
       //checking if the current value is an object itself
       if (typeof obj[keys] === "object") {
         // if so then again calling the same function
-        changeValue(obj[keys], variables);
+        changeValue(obj[keys], ingredients);
       } else {
         var inputValue = obj[keys];
         if (
@@ -14,10 +14,10 @@ function changeValue(obj, variables) {
           (inputValue.startsWith("$") || inputValue.startsWith("!"))
         ) {
           const variableName = inputValue.slice(1); // Remove $ prefix
-          if (variables.hasOwnProperty(variableName)) {
-            obj[keys] = variables[variableName];
+          if (ingredients.hasOwnProperty(variableName)) {
+            obj[keys] = ingredients[variableName];
             console.log(
-              `Substituted variable ${inputValue} with value ${variables[variableName]} in node ${obj[keys]}`,
+              `Substituted variable ${inputValue} with value ${ingredients[variableName]} in node ${obj[keys]}`,
             );
           } else {
             console.warn(
@@ -31,15 +31,15 @@ function changeValue(obj, variables) {
   }
 }
 
-export async function runRecipe(recipe, variables, engine, callback) {
+export async function runRecipe(recipe, ingredients, engine, callback) {
   console.log(`Recipe Id ${recipe.id}`);
   console.log(`Title ${recipe.title}`);
   console.log(`Description ${recipe.description}`);
 
-  // substitute variables in the recipe
+  // substitute ingredients in the recipe
   for (const process of recipe.processing) {
     for (const node of process.nodes) {
-      changeValue(node, variables);
+      changeValue(node, ingredients);
     }
   }
 

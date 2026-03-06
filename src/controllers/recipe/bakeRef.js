@@ -60,10 +60,10 @@ export async function post(req, res) {
       .json({ error: "Recipe document is not a JSON object." });
   }
 
-  // first variables from request body, then from recipe document, default to empty object
-  const variables = req.body?.variables || recipe?.variables || {}; 
+  // first ingredients from request body, then from recipe document, default to empty object
+  const ingredients = req.body?.ingredients || recipe?.ingredients || {}; 
 
-  await runRecipe(recipe, variables, engine, function (err, content) {
+  await runRecipe(recipe, ingredients, engine, function (err, content) {
     if (err) {
       res
         .status(err.httpCode)

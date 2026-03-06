@@ -62,12 +62,12 @@ export async function post(req, res) {
   const recipeUri = req.body?.recipe;
 
   var recipe = {};
-  var variables = {};
+  var ingredients = {};
 
   switch (type) {
     case "recipe":
       recipe = req.body;
-      variables = req.body?.variables || {};
+      ingredients = req.body?.ingredients || {};
       break;
     case "recipe-ref":
       if (!recipeUri || typeof recipeUri !== "string") {
@@ -84,8 +84,8 @@ export async function post(req, res) {
           return;
         }
       });
-      // first variables from request body, then from recipe document, default to empty object
-      variables = req.body?.variables || recipe?.variables || {};
+      // first ingredients from request body, then from recipe document, default to empty object
+      ingredients = req.body?.ingredients || recipe?.ingredients || {};
       break;
     default:
       return res.status(400).json({
@@ -101,7 +101,7 @@ export async function post(req, res) {
 
   const engine = req.app.locals.engine;
 
-  await runRecipe(recipe, variables, engine, function (err, content) {
+  await runRecipe(recipe, ingredients, engine, function (err, content) {
     if (err) {
       res
         .status(err.httpCode)
