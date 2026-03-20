@@ -1,6 +1,6 @@
 {
   "version": "1",
-  "name": "Recipe",
+  "name": "Oven",
   "type": "collection",
   "ignore": [
     "node_modules",
