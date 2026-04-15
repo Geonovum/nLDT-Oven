@@ -1,4 +1,4 @@
-# nLDT-Oven
+# nLDT-Cook
 Bakes [nLDT-Recipe](https://github.com/Geonovum/nLDT-Recipe)s
 
 # Recipes
