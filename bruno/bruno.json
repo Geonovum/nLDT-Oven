@@ -1,6 +1,6 @@
 {
   "version": "1",
-  "name": "Oven",
+  "name": "Cook",
   "type": "collection",
   "ignore": [
     "node_modules",
