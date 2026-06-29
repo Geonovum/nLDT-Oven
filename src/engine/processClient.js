@@ -35,7 +35,7 @@ export class ProcessClient {
       if (!response.ok) throw new Error(await response.text());
       const json = await response.json();
       const location = response.headers.get("location") || ""; // job identifier
-      return normalize(json.outputs);
+      return json;
     }
 
     // Async mode: expect 202, then either wait for callback or poll
@@ -50,7 +50,7 @@ export class ProcessClient {
     // Subscriber present: external system will call our callback; wait for it
     if (body.subscriber) {
       const data = await callbackRegistry.waitFor(jobId);
-      return normalize(data.outputs);
+      return data;
     }
 
     return this.poll(location);
