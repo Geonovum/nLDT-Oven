@@ -109,6 +109,29 @@ export async function post(req, res) {
       return;
     }
 
-    res.status(200).json(content);
+    const boundary = "MIME_boundary_abc123";
+
+    res.setHeader("Content-Type", `multipart/related; boundary=${boundary}`);
+
+    let body = [];
+
+    for (const [process, v] of Object.entries(content)) {
+      for (const [step, value] of Object.entries(v)) {
+        body.push( `--${boundary}\r\n`);
+        // Headers voor dit specifieke JSON-onderdeel
+        body.push("Content-Type: application/json; charset=UTF-8\r\n");
+        
+        let bb = {}
+        bb[step] = value
+        let aa = {}
+        aa[process] = bb
+
+        body.push(JSON.stringify(aa, null, 2) + "\r\n");
+      }
+    }
+
+    body.push(`--${boundary}--\r\n`);
+
+    res.status(200).send(body.join(""));
   });
 }
