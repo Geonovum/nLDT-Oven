@@ -109,29 +109,37 @@ export async function post(req, res) {
       return;
     }
 
-    const boundary = "MIME_boundary_abc123";
+    let c1 =  Object.entries(content).length
+    let c2 =  Object.entries(content).reduce((acc, [process, v]) => acc + Object.entries(v).length, 0);
 
-    res.setHeader("Content-Type", `multipart/related; boundary=${boundary}`);
+    if (c1 > 1 || c2 > 1) {
+      const boundary = `MIME_boundary_recipe`;
 
-    let body = [];
+      res.setHeader("Content-Type", `multipart/related; boundary=${boundary}`);
 
-    for (const [process, v] of Object.entries(content)) {
-      for (const [step, value] of Object.entries(v)) {
-        body.push( `--${boundary}\r\n`);
-        // Headers voor dit specifieke JSON-onderdeel
-        body.push("Content-Type: application/json; charset=UTF-8\r\n");
-        
-        let bb = {}
-        bb[step] = value
-        let aa = {}
-        aa[process] = bb
+      let body = [];
 
-        body.push(JSON.stringify(aa, null, 2) + "\r\n");
+      for (const [process, v] of Object.entries(content)) {
+        for (const [step, value] of Object.entries(v)) {
+          body.push( `--${boundary}\r\n`);
+          // Headers voor dit specifieke JSON-onderdeel
+          body.push("Content-Type: application/json; charset=UTF-8\r\n");
+          
+          let bb = {}
+          bb[step] = value
+          let aa = {}
+          aa[process] = bb
+
+          body.push(JSON.stringify(aa, null, 2) + "\r\n");
+        }
       }
+
+      body.push(`--${boundary}--\r\n`);
+      res.status(200).send(body.join(""));
     }
-
-    body.push(`--${boundary}--\r\n`);
-
-    res.status(200).send(body.join(""));
+    else
+    {
+          res.status(200).json(content);
+    }
   });
 }
